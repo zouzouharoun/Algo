@@ -77,19 +77,9 @@ public interface Algorithms {
 
                             monstersToFill[i][j] = 1 + rng.nextInt(50);
                             // si on est dans la derniere case de la rangé et qu'on a tjr pas 2 monstres pas besoin d'aller a la fin de la boucle pour regénérer
-                            if(j==monstersToFill[i].length && !testMonsters(monstersToFill[i])){
+                            if(j==monstersToFill[i].length-1 && !testMonsters(monstersToFill[i])){
                                 while (!testMonsters(monstersToFill[i])){
-                                    for (int l = 0; l < monstersToFill[i].length; l++) {
-
-                                        
-
-                                        if (rng.nextDouble() <= 1.0 / 3.0 && !isCellOccupied(treasuresToFill, i,l )) {
-                                                monstersToFill[i][l] = 1 + rng.nextInt(50);
-
-                                        }
-                                        
-                                    }
-                                    monstersToFill[0][monstersToFill[0].length/2] = 0;
+                                    generateMonsters(treasuresToFill, monstersToFill, i);
 
                                 }
                             }
@@ -99,7 +89,7 @@ public interface Algorithms {
                             if (2.0/6.0 < prob&&prob <= 3.0 / 6.0){
                                 //generer un tresor
                                 treasuresToFill[i][j] = 1 + rng.nextInt(99);
-                                if(j==treasuresToFill[i].length && (!testTreasures(treasuresToFill[i])||!isTreasuresLessThanOrEqualToMonstersTotal(monstersToFill[i],treasuresToFill[i]))){
+                                if(j==treasuresToFill[i].length-1 && (!testTreasures(treasuresToFill[i])||!isTreasuresLessThanOrEqualToMonstersTotal(monstersToFill[i],treasuresToFill[i]))){
                                     while (!testTreasures(treasuresToFill[i])||!isTreasuresLessThanOrEqualToMonstersTotal(monstersToFill[i],treasuresToFill[i])){
                                         generateTreasures(treasuresToFill, monstersToFill,i );
 
@@ -136,7 +126,7 @@ public interface Algorithms {
                 
                 while (!testTreasures(treasuresToFill[i])||!isTreasuresLessThanOrEqualToMonstersTotal(monstersToFill[i],treasuresToFill[i])){
                     
-                        generateTreasures(treasuresToFill, monstersToFill, i);
+                    generateTreasures(treasuresToFill, monstersToFill, i);
                             
                                 
                         
@@ -206,6 +196,24 @@ public interface Algorithms {
                     treasuresToFill[row][l] = 0;
                     if (rng.nextDouble() <= 1.0 / 6.0 && !isCellOccupied(monstersToFill, row, l)) {
                         treasuresToFill[row][l] = 1 + rng.nextInt(99);
+                    }
+                }
+        
+            }  
+        
+            
+        
+    
+        }
+        static void generateMonsters(int[][] treasuresToFill, int[][] monstersToFill, int row) {
+            
+            // Remplir la rangée de monstres
+            
+            for (int l = 0; l < treasuresToFill[row].length; l++) {
+                if(row!=0&&l!=treasuresToFill[row].length/2){
+                    
+                    if (rng.nextDouble() <= 1.0 / 3.0 && !isCellOccupied(treasuresToFill, row, l)) {
+                        monstersToFill[row][l] = 1 + rng.nextInt(50);
                     }
                 }
         
