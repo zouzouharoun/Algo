@@ -9,6 +9,13 @@
             "name": "Algorithms",
             "request": "launch",
             "mainClass": "Algorithms",
+            "projectName": "Algo-6_43e6c715"
+        },
+        {
+            "type": "java",
+            "name": "Algorithms",
+            "request": "launch",
+            "mainClass": "Algorithms",
             "projectName": "Algo_9fa877f0"
         }
     ]
