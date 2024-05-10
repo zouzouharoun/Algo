@@ -43,7 +43,9 @@ public interface Algorithms {
         // Afficher le plateau de jeu mélangé
 
         State currentState = new State(heroPosition, 100, 0, monsters, treasures, 0, 0);
-        GS.greedySolution(currentState);
+       int  score = GS.greedySolution(currentState);
+        System.out.println("Score à atteindre : " + score);
+
     }
 
 
@@ -73,8 +75,8 @@ public interface Algorithms {
            @ ensures (\forall int i; 0 <= i && i < monstersToFill.length; testMonsters(monstersToFill[i]) && testTreasures(treasuresToFill[i]));
         @*/ 
         //Specification: HAROUN ZOUZOUZ | Last update: 10/05/24
-// Implementation: HAROUN ZOUZOU | Last update : 09/05/24
-// Test/Debug: Gloria | Last update : 09/05/24   
+        // Implementation: HAROUN ZOUZOU | Last update : 09/05/24
+        // Test/Debug: Gloria | Last update : 09/05/24
             static void generateMonstersAndTreasures(int[][] monstersToFill, int[][] treasuresToFill) {
     
     

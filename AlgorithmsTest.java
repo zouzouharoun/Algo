@@ -207,6 +207,7 @@ class AlgorithmsTest {
         //act
         String bestPath = Algorithms.DP.perfectSolution(bestSolutionState);
         visitPath(bestSolutionState, bestPath);
+        visitPath(bestSolutionState, bestPath);
         int greedyScore = Algorithms.GS.greedySolution(state);
 
         //assert
