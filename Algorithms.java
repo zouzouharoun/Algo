@@ -290,6 +290,18 @@ public interface Algorithms {
 
         /* --- Algorithm used : MergeSort --- */
 
+        /*@ [First, OpenJML doc]
+          @ requires monstersToSort != null && monstersToSort.length == trasuresToSort.length;
+          @ requires (\forall int n; 0 <= i && monstersToSort[n].length == treasuresToSort[n].length;
+          @ ensures \old(monstersToSort.length) == monstersToSort.length == treasuresToSort.length;
+          @ ensures (\forall int n; 0 <= i && \old(monstersToSort[n].length) == monstersToSort[n].length == treasuresToSort[n].length;
+
+          --- [Second, authors info]
+          * Specification: Mariya Ivakhnenko & Cours de P-Y. Schobbens | Last update : 10/05/24
+          * Implementation: Mariya Ivakhnenko | Last update : 10/05/24
+          * Test/Debug: Mariya Ivakhnenko & ChatGPT (IA) & Phind (IA)| Last update : 10/05/24
+        ***/
+
         static void sortLevel(int[][] monstersToSort, int[][] treasuresToSort) {
             
             // Calculate the initial values for each row
@@ -309,13 +321,13 @@ public interface Algorithms {
         /*@  normal behaviour
           @  requires treasuresToSort.length == monstersToSort.length && (\for all int n treasuresToSort[n].length == monstersToSort[n].length);
           @  requires monstersToSort !=null && monstersToSort.length >0;
-          @  requires 0<= start && end<= tab.length);
+          @  requires 0<= start && end<= rowValues.length);
 
           @  ensure \old(rowValues.length) == rowValues.length == monstersToSort.length == treasuresToSort.length
           @  ensures \forall int i; 0 <= i && i < \old(rowValues.length ) ;
           @  (\exists int j; 0 <= j && j < treasuresToSort.length ;
           @       rowValues[j] == \old(rowValues[i]) && treasuresToSort[j] == \old(treasuresToSort[i] &&& monstersToSort[j] == \old(monstersToSort[i])));
-          @  ensures (\forall int i ; 0<= i && i < rowValues.length - 1; rowValues[i] <= tab[i+1]) ;
+          @  ensures (\forall int i ; 0<= i && i < rowValues.length - 1; rowValues[i] <= rowValues[i+1]) ;
         @*/
         static void merge_sort (int[] rowValues,int[][] monstersToSort,int[][] treasuresToSort,int start,int end){
             
@@ -338,7 +350,7 @@ public interface Algorithms {
           @ ensures \old (rowValues.length ) == row_values. length;
           @ ensures (\forall int i; 0 <= 1 && 1 < \old (rowValues.length ) ;
           @ (\exists int j: 0 <=j && j < rowValues.length;
-                tab [j] == \old (tab[i])));
+                rowValues[j] == \old (rowValues[i])));
           @ ensures (\forall int i; start <= i && i < end; rowValues[i] <= rowValues[i+1]) ;
         @*/
         static void merge(int[] rowValues,int[][] monstersToSort,int[][] treasuresToSort,int start,int mid, int end){
