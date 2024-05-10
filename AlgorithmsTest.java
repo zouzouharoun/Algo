@@ -210,6 +210,8 @@ class AlgorithmsTest {
         int greedyScore = Algorithms.GS.greedySolution(state);
 
         //assert
+        System.out.print(greedyScore);
+        System.out.print(bestSolutionState.heroScore);
         assertTrue(greedyScore <= bestSolutionState.heroScore, "Greedy solution is better than DP solution");
     }
 

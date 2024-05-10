@@ -32,18 +32,16 @@ public interface Algorithms {
         printBoard(monsters, treasures);
 
         // Vérifier si  y a vraiment au minimum 2 monstres
-        for (int i = 0; i < monsters.length; i++) {
-            System.out.println(GT.isTreasuresLessThanOrEqualToMonstersTotal(monsters[i],treasures[i]));
-            System.out.println(GT.testTreasures(treasures[i]));
+       // for (int i = 0; i < monsters.length; i++) {
+       //     System.out.println(GT.isTreasuresLessThanOrEqualToMonstersTotal(monsters[i],treasures[i]));
+       //     System.out.println(GT.testTreasures(treasures[i]));
 
-            System.out.println(GT.testMonsters(monsters[i]));}
+       //     System.out.println(GT.testMonsters(monsters[i]));}
 
 
 
         // Afficher le plateau de jeu mélangé
-        int[][] mixedTable = GS.mixMonstersAndTreasures(monsters, treasures);
-        System.out.println("Plateau de jeu avec monstres et trésors mélangés :");
-        GS.printBoard(mixedTable);
+
         State currentState = new State(heroPosition, 100, 0, monsters, treasures, 0, 0);
         GS.greedySolution(currentState);
     }
@@ -412,14 +410,14 @@ public interface Algorithms {
             public static int greedySolution(State state) {
                 // Afficher le plateau de jeu mélangé
                 int[][] mixedTable = GS.mixMonstersAndTreasures(state.monsters, state.treasures);
-                System.out.println("Plateau de jeu avec monstres et trésors mélangés :");
-                GS.printBoard(mixedTable);
+                //System.out.println("Plateau de jeu avec monstres et trésors mélangés :");
+                //GS.printBoard(mixedTable);
 
-                // Afficher la meilleur direction a prendre
+                // Afficher lae score à atteindre
                 List<List<int[]>> paths = GS.getPaths(state.heroPos, mixedTable, 5, new ArrayList<>(), new ArrayList<>(), new HashSet<>());
                 int score = GS.getBest(paths, mixedTable, 100);
-                System.out.println("Joueur Position: [" + state.heroPos[0] + ", " + state.heroPos[1] + "]");
-                System.out.print("Score à atteindre: " + score);
+                //System.out.println("Joueur Position: [" + state.heroPos[0] + ", " + state.heroPos[1] + "]");
+                //System.out.print("Score à atteindre: " + score);
 
             return score;}
 
@@ -451,7 +449,6 @@ public interface Algorithms {
             /*@ [First, OpenJML doc]
             //@ requires joueur != null && board != null && path != null && paths != null && visited != null && steps >= 0;
             //@ ensures paths != null && (\forall List<int[]> p; paths.contains(p); (\forall int[] move; p.contains(move); board[move[0]][move[1]] != -1)
-            @ pure
             --- [Second, authors info]
             * Specification: Rayane | Last update: 10/05/24
             * Implementation: Rayane | Last update : 10/05/24
@@ -474,7 +471,6 @@ public interface Algorithms {
             /*@ [First, OpenJML doc]
             //@ requires paths != null && board != null && pv >= 0;
             // @ ensures \result != null && (\forall int[] move; \result.contains(move); board[move[0]][move[1]] != -1);
-            @ pure
             --- [Second, authors info]
             * Specification: Rayane | Last update: 10/05/24
             * Implementation: Rayane | Last update : 10/05/24
