@@ -538,19 +538,34 @@ public interface Algorithms {
 
 
 
-    /* --- Dynamic Programming --- */
+ /* --- Dynamic Programming --- */
     interface DP {
+        /*@ [First, OpenJML doc]
+        //@ requires state != null;
+        --- [Second, authors info]
+        * Specification: Antoine | Last update: 10/05/24
+        * Implementation: Antoine | Last update : 10/05/24
+        * Test/Debug: Antoine | Last update : 10/05/24
+        ***/
         static String perfectSolution(State state) {
             // Initialiser la table de mémoire pour stocker les sous-résultats
             String[][] memoTable = new String[state.monsters.length][state.monsters[0].length];
-            
+            StringBuilder optimalSequence = new StringBuilder();
             // Appeler la fonction auxiliaire récursive pour calculer la solution optimale
-            String optimalSequence = calculateOptimalSequence(state, memoTable);
+            String finalSequence = calculateOptimalSequence(state, memoTable, optimalSequence);
             
-            return optimalSequence;
+            return finalSequence;
         }
-
-        static String calculateOptimalSequence(State state, String[][] memoTable) {
+        /*@ [First, OpenJML doc]
+        //@ requires memoTable != null && optimalSequence != null &&  state != null;
+        // @ ensures \result != null;
+        @ pure
+        --- [Second, authors info]
+        * Specification: Antoine | Last update: 10/05/24
+        * Implementation: Antoine | Last update : 10/05/24
+        * Test/Debug: Antoine | Last update : 10/05/24
+        ***/
+        static String calculateOptimalSequence(State state, String[][] memoTable, StringBuilder optimalSequence) {
             int[][] monsters = state.monsters;
             int[][] treasures = state.treasures;
             int[] heroPos = state.heroPos;
@@ -560,17 +575,16 @@ public interface Algorithms {
             int numCols = monsters[0].length;
         
             // Vérifie si le sous-problème a déjà été résolu et le récupérer à partir de la table de mémoire si possible
-            if (memoTable[heroPos[0]][heroPos[1]] != null) {
-                return memoTable[heroPos[0]][heroPos[1]];
+            String memoizedResult = memoTable[heroPos[0]][heroPos[1]];
+            if (memoizedResult != null) {
+                return memoizedResult;
             }
-        
-            StringBuilder optimalSequence = new StringBuilder();
         
             // Vérifie les cases adjacentes pour trouver le meilleur trésor ou le monstre le plus faible
             int[] dx = {-1, 1, 0}; // Déplacement horizontal
             int[] dy = {0, 0, 1}; // Déplacement vertical
-            int maxTreasure = -1;
-            int minMonster = Integer.MAX_VALUE;
+            Integer maxTreasure = -1;
+            Integer minMonster = Integer.MAX_VALUE;
             int bestDirection = -1;
         
             for (int i = 0; i < 3; i++) {
@@ -580,10 +594,12 @@ public interface Algorithms {
                     if (treasures[newRow][newCol] > 0 && treasures[newRow][newCol] > maxTreasure) {
                         maxTreasure = treasures[newRow][newCol];
                         bestDirection = i;
+                        memoTable[newRow][newCol] = maxTreasure.toString();
                     }
                     else if (monsters[newRow][newCol] > 0 && monsters[newRow][newCol] < minMonster) {
                         minMonster = monsters[newRow][newCol];
                         bestDirection = i;
+                        memoTable[newRow][newCol] = minMonster.toString();
                     }
                     else {
                         bestDirection = 2;
@@ -600,17 +616,29 @@ public interface Algorithms {
                     int newCol = heroPos[1] + dy[bestDirection];
                     optimalSequence.append("(").append(newRow).append(",").append(newCol).append(")");
                     // Mets à jour la table de mémoire avec le résultat calculé
-                    memoTable[heroPos[0]][heroPos[1]] = optimalSequence.toString();
+                    
                     // Mets à jour la position du chemin à prendre dans l'état
                     currentState.heroPos = new int[]{newRow, newCol};
                     //Appel récursif de la fonction avec la meilleur position mise à jour dans le currentState
-                    optimalSequence = new StringBuilder(calculateOptimalSequence(currentState, memoTable));
+                    optimalSequence = new StringBuilder(calculateOptimalSequence(currentState, memoTable, optimalSequence));
                     
                 }
             }
+            int newRow = heroPos[0] + dx[bestDirection];
+            int newCol = heroPos[1] + dy[bestDirection];
+            optimalSequence.append("(").append(newRow).append(",").append(newCol).append(")");
             return optimalSequence.toString();
         }
-        
+
+        /*@ [First, OpenJML doc]
+        //@ requires path != null && row != null && col != null;
+        // @ ensures \result != null;
+        @ pure
+        --- [Second, authors info]
+        * Specification: Antoine | Last update: 10/05/24
+        * Implementation: Antoine | Last update : 10/05/24
+        * Test/Debug: Antoine | Last update : 10/05/24
+        ***/
         // Vérifie si la cellule a déjà été visitée
         static boolean isCellOccupied(StringBuilder path, int row, int col) {
             return path.toString().contains("(" + row + "," + col + ")");
