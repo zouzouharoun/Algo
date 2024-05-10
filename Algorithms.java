@@ -242,12 +242,101 @@ public interface Algorithms {
 
     /* --- Divide & Conquer --- */
     interface DC {
-        static void sortLevel(int[][] monstersToSort, int[][] treasuresToSort) {
-            //TODO
+        
+        /* --- Algorithm used : MergeSort --- */
+
+        static void get_sorted_rows(int[][] monstersToSort, int[][] treasuresToSort) {
+            
+            // Calculate the initial values for each row
+            int[] rowValues = new int[monstersToSort.length];
+            for (int i = 0; i < monstersToSort.length; i++) {
+                rowValues[i] = sumRow(monstersToSort[i], treasuresToSort[i]);
+            }
+            
+            // Perform the merge sort
+            merge_sort(rowValues, monstersToSort, treasuresToSort, 0, monstersToSort.length - 1);
         }
 
+
+        /* --- MergeSort --- */
+
+        /*@  normal behaviour
+          @  requires treasuresToSort.length == monstersToSort.length && (\for all int n treasuresToSort[n].length == monstersToSort[n].length);
+          @  requires monstersToSort !=null && monstersToSort.length >0;
+          @  requires 0<= start && end<= tab.length);
+
+          @  ensure \old(rowValues.length) == rowValues.length == monstersToSort.length == treasuresToSort.length
+          @  ensures \forall int i; 0 <= i && i < \old(rowValues.length ) ;
+          @  (\exists int j; 0 <= j && j < treasuresToSort.length ;
+          @       rowValues[j] == \old(rowValues[i]) && treasuresToSort[j] == \old(treasuresToSort[i] &&& monstersToSort[j] == \old(monstersToSort[i])));
+          @  ensures (\forall int i ; 0<= i && i < rowValues.length - 1; rowValues[i] <= tab[i+1]) ;
+        @*/
+        static void merge_sort (int[] rowValues,int[][] monstersToSort,int[][] treasuresToSort,int start,int end){
+            
+            int mid;
+            if (start<end)
+            {
+                mid = (start + end) / 2;
+                merge_sort(rowValues, monstersToSort, treasuresToSort, start, end);
+                merge_sort(rowValues, monstersToSort, treasuresToSort, mid+1, end);
+                merge(rowValues, monstersToSort, treasuresToSort, start, mid, end);
+            }
+        }
+
+        /* --- Merge --- */
+        /*@  requires 0 <= start && start ‹ mid && mid <= end && end < rowValues.length;
+          @  requires rowValues != null && rowValues.length > 0;
+          @  requires rowValues.length == array_rows.length == monstersToSort.length == treasuresToSort.length;        
+
+          @ ensures \old (array_rows. length ) == array_rows.length == row_values. length == monstersToSort.length == treasuresToSort.length;
+          @ ensures \old (rowValues.length ) == row_values. length;
+          @ ensures (\forall int i; 0 <= 1 && 1 < \old (rowValues.length ) ;
+          @ (\exists int j: 0 <=j && j < rowValues.length;
+                tab [j] == \old (tab[i])));
+          @ ensures (\forall int i; start <= i && i < end; rowValues[i] <= rowValues[i+1]) ;
+        @*/
+        static void merge(int[] rowValues,int[][] monstersToSort,int[][] treasuresToSort,int start,int mid, int end){
+            int[] array_rows = new int [rowValues.length];
+            int[][] array_monsters = new int [monstersToSort.length][monstersToSort[0].length];
+            int[][] array_treasures = new int [treasuresToSort.length][treasuresToSort[0].length];
+
+            int i, j ;
+            for (i = start; i<= mid; i++) {
+                array_rows[i] = rowValues[i];
+                array_monsters[i] = monstersToSort[i];
+                array_treasures[i] = treasuresToSort[i];
+            }
+            for (j = mid + 1; j <= end; j++){
+                array_rows[end + mid +1 - j] = rowValues[j];
+                array_monsters[end + mid +1 - j] = monstersToSort[j];
+                array_treasures[end + mid +1 - j] = treasuresToSort[j];
+            }
+            i = start;
+            j = end;
+            for (int k = start; k<= end; k++) {
+                if(array_rows[i] <= array_rows[j]){
+                    rowValues[k] = array_rows[i];
+                    monstersToSort[k] = array_monsters[i];
+                    treasuresToSort[k] = array_treasures[i];
+                    i++;
+                }
+                else{
+                    rowValues[k] = array_rows[j];
+                    monstersToSort[k] = array_monsters[j];
+                    treasuresToSort[k] = array_treasures[j];
+                    j--;
+                }
+            }
+        }
         /* --- Utility functions for DC --- */
-        //TODO (if you have any)
+        static int sumRow(int[] row_monsters, int[] row_treasures) {
+            int sum = 0;
+            for (int i = 0; i < row_monsters.length; i++) {
+                sum += row_treasures[i] - row_monsters[i];
+            }
+            return sum;
+        }
+
     }
 
 
