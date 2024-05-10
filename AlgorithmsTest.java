@@ -207,7 +207,7 @@ class AlgorithmsTest {
         //act
         String bestPath = Algorithms.DP.perfectSolution(bestSolutionState);
         visitPath(bestSolutionState, bestPath);
-        int greedyScore = Algorithms.GS.greedySolution.greedySolution(state);
+        int greedyScore = Algorithms.GS.greedySolution(state);
 
         //assert
         assertTrue(greedyScore <= bestSolutionState.heroScore, "Greedy solution is better than DP solution");

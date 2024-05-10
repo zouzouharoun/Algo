@@ -45,7 +45,7 @@ public interface Algorithms {
         System.out.println("Plateau de jeu avec monstres et trésors mélangés :");
         GS.printBoard(mixedTable);
         State currentState = new State(heroPosition, 100, 0, monsters, treasures, 0, 0);
-        GS.greedySolution.greedySolution(currentState);
+        GS.greedySolution(currentState);
     }
 
 
@@ -345,7 +345,13 @@ public interface Algorithms {
     /* --- Greedy Search --- */
 
     interface GS {
-        class greedySolution {
+            /*@ [First, OpenJML doc]
+            //@ requires State != null;
+            --- [Second, authors info]
+            * Specification: Rayane | Last update: 10/05/24
+            * Implementation: Rayane | Last update : 10/05/24
+            * Test/Debug: Rayane | Last update : 10/05/24
+            ***/
             public static int greedySolution(State state) {
                 // Afficher le plateau de jeu mélangé
                 int[][] mixedTable = GS.mixMonstersAndTreasures(state.monsters, state.treasures);
@@ -354,13 +360,21 @@ public interface Algorithms {
 
                 // Afficher la meilleur direction a prendre
                 List<List<int[]>> paths = GS.getPaths(state.heroPos, mixedTable, 5, new ArrayList<>(), new ArrayList<>(), new HashSet<>());
-                int bestMove = GS.getBest(paths, mixedTable, 100);
+                int score = GS.getBest(paths, mixedTable, 100);
                 System.out.println("Joueur Position: [" + state.heroPos[0] + ", " + state.heroPos[1] + "]");
-                System.out.print("Score à atteindre: " + bestMove);
+                System.out.print("Score à atteindre: " + score);
 
-            return 0;}
-        }
+            return score;}
 
+            /*@ [First, OpenJML doc]
+            //@ requires joueur != null && board != null && visited != null;
+            //@ ensures (\forall int[] move; \result.contains(move); board[move[0]][move[1]] != -1) &&
+              (\forall int[] move; \result.contains(move); !visited.contains(move[0] + "," + move[1]));
+            --- [Second, authors info]
+            * Specification: Rayane | Last update: 10/05/24
+            * Implementation: Rayane | Last update : 10/05/24
+            * Test/Debug: Rayane | Last update : 10/05/24
+            ***/
 
             public static List<int[]> getOptions(int[] joueur, int[][] board, Set<String> visited) {
                 List<int[]> moves = new ArrayList<>();
@@ -377,6 +391,15 @@ public interface Algorithms {
                 return moves;
             }
 
+            /*@ [First, OpenJML doc]
+            //@ requires joueur != null && board != null && path != null && paths != null && visited != null && steps >= 0;
+            //@ ensures paths != null && (\forall List<int[]> p; paths.contains(p); (\forall int[] move; p.contains(move); board[move[0]][move[1]] != -1)
+            @ pure
+            --- [Second, authors info]
+            * Specification: Rayane | Last update: 10/05/24
+            * Implementation: Rayane | Last update : 10/05/24
+            * Test/Debug: Rayane | Last update : 10/05/24
+            ***/
             public static List<List<int[]>> getPaths(int[] joueur, int[][] board, int steps, List<int[]> path, List<List<int[]>> paths, Set<String> visited) {
                 if (steps == 0) {
                     paths.add(new ArrayList<>(path));
@@ -391,7 +414,15 @@ public interface Algorithms {
                 }
                 return paths;
             }
-
+            /*@ [First, OpenJML doc]
+            //@ requires paths != null && board != null && pv >= 0;
+            // @ ensures \result != null && (\forall int[] move; \result.contains(move); board[move[0]][move[1]] != -1);
+            @ pure
+            --- [Second, authors info]
+            * Specification: Rayane | Last update: 10/05/24
+            * Implementation: Rayane | Last update : 10/05/24
+            * Test/Debug: Rayane | Last update : 10/05/24
+            ***/
             public static int getBest(List<List<int[]>> paths, int[][] board, int pv) {
                 List<Integer> values = new ArrayList<>();
                 for (List<int[]> path : paths) {
@@ -516,7 +547,7 @@ public interface Algorithms {
                     // Mets à jour la position du chemin à prendre dans l'état
                     currentState.heroPos = new int[]{newRow, newCol};
                     //Appel récursif de la fonction avec la meilleur position mise à jour dans le currentState
-                    optimalSequence.append(calculateOptimalSequence(currentState, memoTable));
+                    optimalSequence = new StringBuilder(calculateOptimalSequence(currentState, memoTable));
                     
                 }
             }
