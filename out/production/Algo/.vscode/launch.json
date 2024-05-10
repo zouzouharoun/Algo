@@ -1,0 +1,22 @@
+{
+    // Utilisez IntelliSense pour en savoir plus sur les attributs possibles.
+    // Pointez pour afficher la description des attributs existants.
+    // Pour plus d'informations, visitez : https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Algorithms",
+            "request": "launch",
+            "mainClass": "Algorithms",
+            "projectName": "Algo_78b8f08d"
+        },
+        {
+            "type": "java",
+            "name": "Algorithms",
+            "request": "launch",
+            "mainClass": "Algorithms",
+            "projectName": "Algo_9fa877f0"
+        }
+    ]
+}

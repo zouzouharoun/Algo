@@ -5,9 +5,10 @@ public interface Algorithms {
 
     static void main(String[] args) {
         // Initialiser les tableaux de monstres et de trésors
-        int[][] monsters = new int[11][7];
-        int[][] treasures = new int[11][7];
-        
+        int[][] monsters = new int[16][10];
+        int[][] treasures = new int[16][10];
+        int[] heroPosition = {0, monsters[0].length/2};
+
         // Ajouter un horodatage avant l'exécution de la méthode
         long startTime = System.currentTimeMillis();
         
@@ -35,6 +36,24 @@ public interface Algorithms {
             System.out.println(GT.testTreasures(treasures[i]));
 
             System.out.println(GT.testMonsters(monsters[i]));}
+
+
+
+        // Afficher le plateau de jeu mélangé
+        int[][] mixedTable = GS.mixMonstersAndTreasures(monsters, treasures);
+        System.out.println("Plateau de jeu avec monstres et trésors mélangés :");
+        GS.printBoard(mixedTable);
+
+        // Afficher la meilleur direction a prendre
+        List<List<int[]>> paths = GS.greedySolution.getPaths(heroPosition , mixedTable, 5, new ArrayList<>(), new ArrayList<>(), new HashSet<>());
+        List<int[]> bestMove = GS.greedySolution.getBest(paths, mixedTable, 100);
+        System.out.println("Joueur Position: [" + heroPosition [0] + ", " + heroPosition [1] + "]");
+        System.out.print("Best Move: [");
+        for (int[] move : bestMove) {
+            System.out.print("[" + move[0] + ", " + move[1] + "], ");
+        }
+        System.out.println("]");
+        System.out.println("The best move to make is: " + GS.greedySolution.getDirection(heroPosition , bestMove));
     }
 
 
@@ -239,15 +258,104 @@ public interface Algorithms {
         //TODO (if you have any)
     }
 
+
+
     /* --- Greedy Search --- */
     interface GS {
-        static int greedySolution(State state) {
-            //TODO
-            return 0;       }
+        class greedySolution {
+            public static List<int[]> getOptions(int[] joueur, int[][] board, Set<String> visited) {
+                List<int[]> moves = new ArrayList<>();
+                int row = joueur[0];
+                int col = joueur[1];
+                int[][] directions = {{1, 0}, {0, -1}, {0, 1}};
+                for (int[] dir : directions) {
+                    int newRow = row + dir[0];
+                    int newCol = col + dir[1];
+                    if (newRow >= 0 && newRow < board.length && newCol >= 0 && newCol < board[0].length && !visited.contains(newRow + "," + newCol)) {
+                        moves.add(new int[]{newRow, newCol});
+                    }
+                }
+                return moves;
+            }
+
+            public static List<List<int[]>> getPaths(int[] joueur, int[][] board, int steps, List<int[]> path, List<List<int[]>> paths, Set<String> visited) {
+                if (steps == 0) {
+                    paths.add(new ArrayList<>(path));
+                    return paths;
+                }
+                for (int[] nextPos : getOptions(joueur, board, visited)) {
+                    visited.add(nextPos[0] + "," + nextPos[1]);
+                    path.add(nextPos);
+                    getPaths(nextPos, board, steps - 1, path, paths, visited);
+                    path.remove(path.size() - 1);
+                    visited.remove(nextPos[0] + "," + nextPos[1]);
+                }
+                return paths;
+            }
+
+            public static List<int[]> getBest(List<List<int[]>> paths, int[][] board, int pv) {
+                List<Integer> values = new ArrayList<>();
+                for (List<int[]> path : paths) {
+                    int v1 = pv;
+                    for (int[] pos : path) {
+                        int x = pos[0];
+                        int y = pos[1];
+                        int v = board[x][y];
+                        v1 += v;
+                    }
+                    values.add(v1);
+                }
+                int best = Collections.max(values);
+                int index = values.indexOf(best);
+                return paths.get(index);
+            }
+
+            public static String getDirection(int[] joueur, List<int[]> direction) {
+                if (joueur[1] < direction.get(0)[1]) {
+                    return "right";
+                } else if (joueur[1] > direction.get(0)[1]) {
+                    return "left";
+                } else if (joueur[0] < direction.get(0)[0]) {
+                    return "down";
+                }
+                return null;
+            }
+
+
+
+            //return 0;
+            }
 
         /* --- Utility functions for GS --- */
-        //TODO (if you have any)
+
+        static void printBoard(int[][] gameBoard) {
+            for (int[] row : gameBoard) {
+                System.out.println(Arrays.toString(row));
+            }
+        }
+
+        // Fonction pour mélanger les tableaux de monstres et de trésors en un seul tableau
+        static int[][] mixMonstersAndTreasures(int[][] monsters, int[][] treasures) {
+            int[][] mixedTable = new int[monsters.length][monsters[0].length];
+            for (int i = 0; i < monsters.length; i++) {
+                for (int j = 0; j < monsters[i].length; j++) {
+                    if (monsters[i][j] != 0) {
+                        mixedTable[i][j] = -monsters[i][j]; // Making monster health negative
+                    } else {
+                        mixedTable[i][j] = treasures[i][j];
+                    }
+                }
+            }
+            return mixedTable;
+        }
+
     }
+
+
+
+
+
+
 
     /* --- Dynamic Programming --- */
     interface DP {
