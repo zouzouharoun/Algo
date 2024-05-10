@@ -68,94 +68,99 @@ public interface Algorithms {
 
     /* --- Generate & Test --- */
     interface GT {
-
-        
-        
-        static void generateMonstersAndTreasures(int[][] monstersToFill, int[][] treasuresToFill) {
-
-
-
-            for (int i = 0; i < monstersToFill.length; i++) {
-                for (int j = 0; j < monstersToFill[i].length; j++) {
-                    if(i!=0 && j!=monstersToFill[0].length/2){
-
-                        // Choisir aléatoirement le contenu de la case
-
-                    
-                        double prob=rng.nextDouble();
-                        if (prob <= 2.0 /6.0 ) {
-                            //génerer un monstre
-
-                            monstersToFill[i][j] = 1 + rng.nextInt(50);
-                            // si on est dans la derniere case de la rangé et qu'on a tjr pas 2 monstres pas besoin d'aller a la fin de la boucle pour regénérer
-                            if(j==monstersToFill[i].length-1 && !testMonsters(monstersToFill[i])){
-                                while (!testMonsters(monstersToFill[i])){
-                                    generateMonsters(treasuresToFill, monstersToFill, i);
-
-                                }
-                            }
-
-                        } else {
-
-                            if (2.0/6.0 < prob&&prob <= 3.0 / 6.0){
-                                //generer un tresor
-                                treasuresToFill[i][j] = 1 + rng.nextInt(99);
-                                if(j==treasuresToFill[i].length-1 && (!testTreasures(treasuresToFill[i])||!isTreasuresLessThanOrEqualToMonstersTotal(monstersToFill[i],treasuresToFill[i]))){
-                                    while (!testTreasures(treasuresToFill[i])||!isTreasuresLessThanOrEqualToMonstersTotal(monstersToFill[i],treasuresToFill[i])){
-                                        generateTreasures(treasuresToFill, monstersToFill,i );
-
+        /* --- generateMonstersAndTreasures --- */
+        /*@ requires monstersToFill != null && treasuresToFill != null;
+           @ requires monstersToFill.length == treasuresToFill.length && treasuresToFill.length > 0;
+           @ requires (\forall int i; 0 <= i && i < monstersToFill.length; treasuresToFill[i].length == monstersToFill[i].length);
+           @ ensures (\forall int i; 0 <= i && i < monstersToFill.length; testMonsters(monstersToFill[i]) && testTreasures(treasuresToFill[i]));
+        @*/    
+            static void generateMonstersAndTreasures(int[][] monstersToFill, int[][] treasuresToFill) {
+    
+    
+    
+                for (int i = 0; i < monstersToFill.length; i++) {
+                    for (int j = 0; j < monstersToFill[i].length; j++) {
+                        if(i!=0 && j!=monstersToFill[0].length/2){
+    
+                            // Choisir aléatoirement le contenu de la case
+    
+                        
+                            double prob=rng.nextDouble();
+                            if (prob <= 2.0 /6.0 ) {
+                                //génerer un monstre
+    
+                                monstersToFill[i][j] = 1 + rng.nextInt(50);
+                                // si on est dans la derniere case de la rangé et qu'on a tjr pas 2 monstres pas besoin d'aller a la fin de la boucle pour regénérer
+                                if(j==monstersToFill[i].length-1 && !testMonsters(monstersToFill[i])){
+                                    while (!testMonsters(monstersToFill[i])){
+                                        generateMonsters(treasuresToFill, monstersToFill, i);
+    
                                     }
                                 }
-                           
+    
+                            } else {
+    
+                                if (2.0/6.0 < prob&&prob <= 3.0 / 6.0){
+                                    //generer un tresor
+                                    treasuresToFill[i][j] = 1 + rng.nextInt(99);
+                                    if(j==treasuresToFill[i].length-1 && (!testTreasures(treasuresToFill[i])||!isTreasuresLessThanOrEqualToMonstersTotal(monstersToFill[i],treasuresToFill[i]))){
+                                        while (!testTreasures(treasuresToFill[i])||!isTreasuresLessThanOrEqualToMonstersTotal(monstersToFill[i],treasuresToFill[i])){
+                                            generateTreasures(treasuresToFill, monstersToFill,i );
+    
+                                        }
+                                    }
+                               
+                                }
+                                
+                            }
+                        
+                        }
+                    }
+    
+                   
+    
+                    //verifier si y'a deux monstres minimum sinon regenerer
+                    while (!testMonsters(monstersToFill[i])){
+                        for (int l = 0; l < monstersToFill[i].length; l++) {
+    
+                            
+    
+                            if (rng.nextDouble() <= 1.0 / 3.0 && !isCellOccupied(treasuresToFill, i,l )) {
+                                monstersToFill[i][l] = 1 + rng.nextInt(50);
+    
                             }
                             
                         }
+                        monstersToFill[0][monstersToFill[0].length/2] = 0;
+    
                     
-                    }
-                }
-
-               
-
-                //verifier si y'a deux monstres minimum sinon regenerer
-                while (!testMonsters(monstersToFill[i])){
-                    for (int l = 0; l < monstersToFill[i].length; l++) {
-
-                        
-
-                        if (rng.nextDouble() <= 1.0 / 3.0 && !isCellOccupied(treasuresToFill, i,l )) {
-                            monstersToFill[i][l] = 1 + rng.nextInt(50);
-
-                        }
-                        
-                    }
-                    monstersToFill[0][monstersToFill[0].length/2] = 0;
-
                 
-            
-                }
-               
-                
-                while (!testTreasures(treasuresToFill[i])||!isTreasuresLessThanOrEqualToMonstersTotal(monstersToFill[i],treasuresToFill[i])){
-                    
-                    generateTreasures(treasuresToFill, monstersToFill, i);
-                            
-                                
-                        
-                }
-            }
-                    
-                    
-                    
+                    }
                    
-
-                
-        }
+                    
+                    while (!testTreasures(treasuresToFill[i])||!isTreasuresLessThanOrEqualToMonstersTotal(monstersToFill[i],treasuresToFill[i])){
+                        
+                        generateTreasures(treasuresToFill, monstersToFill, i);
+                                
+                                    
+                            
+                    }
+                }
+                        
+                        
+                        
+                       
+    
+                    
+            }
                 
            
 
 
         
-        //verifier s'il ya deux monstres
+        /*@ requires row != null;
+          @ ensures \result == (\num_of int cell; (\exists int i; 0 <= i && i < row.length; row[i] >= 1 && row[i] <= 50) >= 2);
+        @*/  
         static boolean testMonsters(int[] row) {
             int count = 0;
             for (int cell : row) {
@@ -169,6 +174,9 @@ public interface Algorithms {
 
         }
 
+         /*@ requires row != null;
+           @ ensures \result == (\num_of int cell; (\exists int i; 0 <= i && i < row.length; row[i] >= 1 && row[i] <= 99) <= 2);
+           @*/
         static boolean testTreasures(int[] row) {
             int count = 0;
             for (int cell : row) {
@@ -181,6 +189,10 @@ public interface Algorithms {
 
 
         }
+        /*@ requires monstersRow != null && treasuresRow != null;
+           @ requires monstersRow.length == treasuresRow.length && treasuresRow.length > 0;
+           @ ensures \result == (\sum int i; 0 <= i && i < monstersRow.length; treasuresRow[i]) <= (\sum int i; 0 <= i && i < monstersRow.length; monstersRow[i]);
+        @*/
         static boolean isTreasuresLessThanOrEqualToMonstersTotal(int[] monstersRow, int[] treasuresRow) {
             int monstersSum = 0;
             int treasuresSum = 0;
@@ -193,11 +205,19 @@ public interface Algorithms {
             return treasuresSum <= monstersSum;
         }
 
-        //verifier si la case ne contient pas de tresors ou de monstres(necessaires lors de la regeneration)
+        /*@ requires matrix != null && 0 <= row && row < matrix.length && 0 <= column && column < matrix[row].length;
+           @ ensures \result == matrix[row][column] > 0;
+        @*/
         static boolean isCellOccupied(int[][] matrix, int row, int column) {
 
             return matrix[row][column] > 0 ;
         }
+
+
+
+        /*@ requires treasuresToFill != null && monstersToFill != null && 0 <= row && row < treasuresToFill.length;
+          @ ensures (\forall int i; 0 <= i && i < treasuresToFill[row].length; treasuresToFill[row][i] >= 0 && treasuresToFill[row][i] <= 99);
+        @*/
         static void generateTreasures(int[][] treasuresToFill, int[][] monstersToFill, int row) {
             
             // Remplir la rangée de trésors avec de nouveaux trésors
@@ -216,9 +236,12 @@ public interface Algorithms {
         
     
         }
+
+            /*@ requires treasuresToFill != null && monstersToFill != null && 0 <= row && row < treasuresToFill.length;
+              @ ensures (\forall int i; 0 <= i && i < monstersToFill[row].length; monstersToFill[row][i] >= 0 && monstersToFill[row][i] <= 50);
+            @*/
         static void generateMonsters(int[][] treasuresToFill, int[][] monstersToFill, int row) {
             
-            // Remplir la rangée de monstres
             
             for (int l = 0; l < treasuresToFill[row].length; l++) {
                 if(row!=0&&l!=treasuresToFill[row].length/2){
