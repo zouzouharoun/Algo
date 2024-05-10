@@ -485,7 +485,7 @@ public interface Algorithms {
             int minMonster = Integer.MAX_VALUE;
             int bestDirection = -1;
         
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 3; i++) {
                 int newRow = heroPos[0] + dx[i];
                 int newCol = heroPos[1] + dy[i];
                 if (newRow >= 0 && newRow < numRows && newCol >= 0 && newCol < numCols && !isCellOccupied(optimalSequence, newRow, newCol)) {
@@ -516,7 +516,7 @@ public interface Algorithms {
                     // Mets à jour la position du chemin à prendre dans l'état
                     currentState.heroPos = new int[]{newRow, newCol};
                     //Appel récursif de la fonction avec la meilleur position mise à jour dans le currentState
-                    calculateOptimalSequence(currentState, memoTable);
+                    optimalSequence.append(calculateOptimalSequence(currentState, memoTable));
                     
                 }
             }
