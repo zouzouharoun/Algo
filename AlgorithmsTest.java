@@ -107,6 +107,7 @@ class AlgorithmsTest {
             for (int j = 0; j < monsters[i].length; j++){
                 rowValue += treasures[i][j] - monsters[i][j];
             }
+            
             assertTrue(previousRow <= rowValue, "Rows are not sorted in increasing order");
             previousRow = rowValue;
         }

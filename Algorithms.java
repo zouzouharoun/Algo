@@ -245,7 +245,7 @@ public interface Algorithms {
 
         /* --- Algorithm used : MergeSort --- */
 
-        static void get_sorted_rows(int[][] monstersToSort, int[][] treasuresToSort) {
+        static void sortLevel(int[][] monstersToSort, int[][] treasuresToSort) {
             
             // Calculate the initial values for each row
             int[] rowValues = new int[monstersToSort.length];
