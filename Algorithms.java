@@ -242,7 +242,7 @@ public interface Algorithms {
 
     /* --- Divide & Conquer --- */
     interface DC {
-        
+
         /* --- Algorithm used : MergeSort --- */
 
         static void get_sorted_rows(int[][] monstersToSort, int[][] treasuresToSort) {
@@ -255,6 +255,7 @@ public interface Algorithms {
             
             // Perform the merge sort
             merge_sort(rowValues, monstersToSort, treasuresToSort, 0, monstersToSort.length - 1);
+            
         }
 
 
@@ -277,7 +278,7 @@ public interface Algorithms {
             if (start<end)
             {
                 mid = (start + end) / 2;
-                merge_sort(rowValues, monstersToSort, treasuresToSort, start, end);
+                merge_sort(rowValues, monstersToSort, treasuresToSort, start, mid);
                 merge_sort(rowValues, monstersToSort, treasuresToSort, mid+1, end);
                 merge(rowValues, monstersToSort, treasuresToSort, start, mid, end);
             }
