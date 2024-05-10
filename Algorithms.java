@@ -3,6 +3,7 @@ import java.util.*;
 public interface Algorithms {
     Random rng = new Random();
 
+
     static void main(String[] args) {
         // Initialiser les tableaux de monstres et de trésors
         int[][] monsters = new int[16][10];
@@ -43,17 +44,8 @@ public interface Algorithms {
         int[][] mixedTable = GS.mixMonstersAndTreasures(monsters, treasures);
         System.out.println("Plateau de jeu avec monstres et trésors mélangés :");
         GS.printBoard(mixedTable);
-
-        // Afficher la meilleur direction a prendre
-        List<List<int[]>> paths = GS.greedySolution.getPaths(heroPosition , mixedTable, 5, new ArrayList<>(), new ArrayList<>(), new HashSet<>());
-        List<int[]> bestMove = GS.greedySolution.getBest(paths, mixedTable, 100);
-        System.out.println("Joueur Position: [" + heroPosition [0] + ", " + heroPosition [1] + "]");
-        System.out.print("Best Move: [");
-        for (int[] move : bestMove) {
-            System.out.print("[" + move[0] + ", " + move[1] + "], ");
-        }
-        System.out.println("]");
-        System.out.println("The best move to make is: " + GS.greedySolution.getDirection(heroPosition , bestMove));
+        State currentState = new State(heroPosition, 100, 0, monsters, treasures, 0, 0);
+        GS.greedySolution.greedySolution(currentState);
     }
 
 
@@ -261,8 +253,25 @@ public interface Algorithms {
 
 
     /* --- Greedy Search --- */
+
     interface GS {
         class greedySolution {
+            public static int greedySolution(State state) {
+                // Afficher le plateau de jeu mélangé
+                int[][] mixedTable = GS.mixMonstersAndTreasures(state.monsters, state.treasures);
+                System.out.println("Plateau de jeu avec monstres et trésors mélangés :");
+                GS.printBoard(mixedTable);
+
+                // Afficher la meilleur direction a prendre
+                List<List<int[]>> paths = GS.getPaths(state.heroPos, mixedTable, 5, new ArrayList<>(), new ArrayList<>(), new HashSet<>());
+                int bestMove = GS.getBest(paths, mixedTable, 100);
+                System.out.println("Joueur Position: [" + state.heroPos[0] + ", " + state.heroPos[1] + "]");
+                System.out.print("Score à atteindre: " + bestMove);
+
+            return 0;}
+        }
+
+
             public static List<int[]> getOptions(int[] joueur, int[][] board, Set<String> visited) {
                 List<int[]> moves = new ArrayList<>();
                 int row = joueur[0];
@@ -293,7 +302,7 @@ public interface Algorithms {
                 return paths;
             }
 
-            public static List<int[]> getBest(List<List<int[]>> paths, int[][] board, int pv) {
+            public static int getBest(List<List<int[]>> paths, int[][] board, int pv) {
                 List<Integer> values = new ArrayList<>();
                 for (List<int[]> path : paths) {
                     int v1 = pv;
@@ -307,51 +316,45 @@ public interface Algorithms {
                 }
                 int best = Collections.max(values);
                 int index = values.indexOf(best);
-                return paths.get(index);
+                //return paths.get(index);
+                return best;
             }
 
-            public static String getDirection(int[] joueur, List<int[]> direction) {
-                if (joueur[1] < direction.get(0)[1]) {
-                    return "right";
-                } else if (joueur[1] > direction.get(0)[1]) {
-                    return "left";
-                } else if (joueur[0] < direction.get(0)[0]) {
-                    return "down";
+
+           // public static String getDirection(int[] joueur, List<int[]> direction) {
+        //    if (joueur[1] < direction.get(0)[1]) {
+        //          return "right";
+        //     } else if (joueur[1] > direction.get(0)[1]) {
+        //          return "left";
+        //       } else if (joueur[0] < direction.get(0)[0]) {
+        //            return "down";
+        //        }
+        //        return null;
+        //    }
+
+            /* --- Utility functions for GS --- */
+
+            static void printBoard(int[][] gameBoard) {
+                for (int[] row : gameBoard) {
+                    System.out.println(Arrays.toString(row));
                 }
-                return null;
             }
 
-
-
-            //return 0;
-            }
-
-        /* --- Utility functions for GS --- */
-
-        static void printBoard(int[][] gameBoard) {
-            for (int[] row : gameBoard) {
-                System.out.println(Arrays.toString(row));
-            }
-        }
-
-        // Fonction pour mélanger les tableaux de monstres et de trésors en un seul tableau
-        static int[][] mixMonstersAndTreasures(int[][] monsters, int[][] treasures) {
-            int[][] mixedTable = new int[monsters.length][monsters[0].length];
-            for (int i = 0; i < monsters.length; i++) {
-                for (int j = 0; j < monsters[i].length; j++) {
-                    if (monsters[i][j] != 0) {
-                        mixedTable[i][j] = -monsters[i][j]; // Making monster health negative
-                    } else {
-                        mixedTable[i][j] = treasures[i][j];
+            // Fonction pour mélanger les tableaux de monstres et de trésors en un seul tableau
+            static int[][] mixMonstersAndTreasures(int[][] monsters, int[][] treasures) {
+                int[][] mixedTable = new int[monsters.length][monsters[0].length];
+                for (int i = 0; i < monsters.length; i++) {
+                    for (int j = 0; j < monsters[i].length; j++) {
+                        if (monsters[i][j] != 0) {
+                            mixedTable[i][j] = -monsters[i][j]; // Making monster health negative
+                        } else {
+                            mixedTable[i][j] = treasures[i][j];
+                        }
                     }
                 }
+                return mixedTable;
             }
-            return mixedTable;
         }
-
-    }
-
-
 
 
 
