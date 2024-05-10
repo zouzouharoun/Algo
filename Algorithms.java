@@ -73,7 +73,10 @@ public interface Algorithms {
            @ requires monstersToFill.length == treasuresToFill.length && treasuresToFill.length > 0;
            @ requires (\forall int i; 0 <= i && i < monstersToFill.length; treasuresToFill[i].length == monstersToFill[i].length);
            @ ensures (\forall int i; 0 <= i && i < monstersToFill.length; testMonsters(monstersToFill[i]) && testTreasures(treasuresToFill[i]));
-        @*/    
+        @*/ 
+        //Specification: HAROUN ZOUZOUZ | Last update: 10/05/24
+// Implementation: HAROUN ZOUZOU | Last update : 09/05/24
+// Test/Debug: Gloria | Last update : 09/05/24   
             static void generateMonstersAndTreasures(int[][] monstersToFill, int[][] treasuresToFill) {
     
     
@@ -160,7 +163,10 @@ public interface Algorithms {
         
         /*@ requires row != null;
           @ ensures \result == (\num_of int cell; (\exists int i; 0 <= i && i < row.length; row[i] >= 1 && row[i] <= 50) >= 2);
-        @*/  
+        @*/
+        // Specification: HAROUN ZOUZOU | Last update: 10/05/24
+        // Implementation: HAROUN ZOUZOU | Last update : 06/05/24
+        // Test/Debug: HAROUN ZOUZOU | Last update : 07/05/24  
         static boolean testMonsters(int[] row) {
             int count = 0;
             for (int cell : row) {
@@ -177,6 +183,9 @@ public interface Algorithms {
          /*@ requires row != null;
            @ ensures \result == (\num_of int cell; (\exists int i; 0 <= i && i < row.length; row[i] >= 1 && row[i] <= 99) <= 2);
            @*/
+           // Specification: ZOUZOU HAROUN | Last update: 10/05/24
+           //Implementation: ZOUZOU HAROUN | Last update : 06/05/24
+           // Test/Debug: ZOUZOU HAROUN | Last update : 07/05/24
         static boolean testTreasures(int[] row) {
             int count = 0;
             for (int cell : row) {
@@ -193,6 +202,9 @@ public interface Algorithms {
            @ requires monstersRow.length == treasuresRow.length && treasuresRow.length > 0;
            @ ensures \result == (\sum int i; 0 <= i && i < monstersRow.length; treasuresRow[i]) <= (\sum int i; 0 <= i && i < monstersRow.length; monstersRow[i]);
         @*/
+        // Specification: HAROUN ZOUZOU| Last update: 10/05/24
+        //Implementation: HAROUN ZOUZOU | Last update : 06/05/24
+        // Test/Debug: HAROUN ZOUZOU | Last update : 07/05/24
         static boolean isTreasuresLessThanOrEqualToMonstersTotal(int[] monstersRow, int[] treasuresRow) {
             int monstersSum = 0;
             int treasuresSum = 0;
@@ -208,6 +220,9 @@ public interface Algorithms {
         /*@ requires matrix != null && 0 <= row && row < matrix.length && 0 <= column && column < matrix[row].length;
            @ ensures \result == matrix[row][column] > 0;
         @*/
+        // Specification: HAROUN ZOUZOU| Last update: 10/05/24
+        // Implementation: HAROUN ZOUZOU  | Last update : 06/05/24
+        // Test/Debug: HAROUN ZOUZOU | Last update : 07/05/24
         static boolean isCellOccupied(int[][] matrix, int row, int column) {
 
             return matrix[row][column] > 0 ;
@@ -218,6 +233,9 @@ public interface Algorithms {
         /*@ requires treasuresToFill != null && monstersToFill != null && 0 <= row && row < treasuresToFill.length;
           @ ensures (\forall int i; 0 <= i && i < treasuresToFill[row].length; treasuresToFill[row][i] >= 0 && treasuresToFill[row][i] <= 99);
         @*/
+        // Specification: HAROUN ZOUZOU | Last update: 10/05/2024
+        // Implementation: HAROUN ZOUZOU | Last update : 08/05/24
+        // Test/Debug: HAROUN ZOUZOU | Last update : 08/05/24
         static void generateTreasures(int[][] treasuresToFill, int[][] monstersToFill, int row) {
             
             // Remplir la rangée de trésors avec de nouveaux trésors
@@ -240,6 +258,10 @@ public interface Algorithms {
             /*@ requires treasuresToFill != null && monstersToFill != null && 0 <= row && row < treasuresToFill.length;
               @ ensures (\forall int i; 0 <= i && i < monstersToFill[row].length; monstersToFill[row][i] >= 0 && monstersToFill[row][i] <= 50);
             @*/
+            // Specification: HAROUN ZOUZOU | Last update: 10/05/2024
+            // Implementation: HAROUN ZOUZOU | Last update : 09/05/24
+            // Test/Debug: HAROUN ZOUZOU | Last update : 09/05/24
+
         static void generateMonsters(int[][] treasuresToFill, int[][] monstersToFill, int row) {
             
             
